@@ -453,7 +453,7 @@
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 16px;
-      max-width: 700px;
+      max-width: 820px;
       width: 100%;
       padding: 2rem;
       position: relative;
@@ -499,16 +499,17 @@
       border-radius: 10px;
       overflow: hidden;
       background: var(--bg3);
-      min-height: 200px;
+      height: 480px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 1.25rem;
     }
 
-    .modal-img-wrap img {
+    .modal-img-wrap iframe {
       width: 100%;
-      height: auto;
+      height: 100%;
+      border: none;
       display: block;
     }
 
@@ -517,6 +518,15 @@
       font-size: 13px;
       text-align: center;
       padding: 3rem 1rem;
+      line-height: 1.8;
+    }
+
+    .modal-img-placeholder code {
+      font-size: 12px;
+      background: var(--tag-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--tag-border);
     }
 
     .modal-actions {
@@ -757,8 +767,9 @@
       <p class="modal-year" id="modal-year"></p>
       <div class="modal-img-wrap" id="modal-img-wrap"></div>
       <div class="modal-actions">
-        <a class="modal-btn primary" id="modal-verify-btn" href="#" target="_blank">Verify credential</a>
-        <a class="modal-btn" id="modal-download-btn" href="#" target="_blank">Download PDF</a>
+        <a class="modal-btn primary" id="modal-open-btn" href="#" target="_blank">Open PDF ↗</a>
+        <a class="modal-btn" id="modal-download-btn" href="#" download>Download</a>
+        <a class="modal-btn" id="modal-verify-btn" href="#" target="_blank">Verify credential</a>
       </div>
     </div>
   </div>
@@ -779,55 +790,49 @@
     });
 
     /* ── CERT DATA ──
-       HOW TO ADD YOUR CERTIFICATE FILES:
-       1. Place certificate images (JPG/PNG) in assets/certs/
-       2. Place PDF versions in assets/certs/ (optional)
-       3. Replace the image/pdf/verify fields below with the real paths/URLs
+       HOW TO ADD YOUR CERTIFICATE PDFs:
+       1. Place all PDFs in assets/certs/
+       2. Fill in the pdf path for each entry below
+       3. Optionally add a verify URL from your credential provider
 
        Example:
-         image: 'assets/certs/google-cybersecurity.jpg'
-         pdf:   'assets/certs/google-cybersecurity.pdf'
-         verify: 'https://www.coursera.org/verify/your-credential-id'
+         pdf:    'assets/certs/google-cybersecurity.pdf'
+         verify: 'https://www.coursera.org/verify/XXXX'
     */
     const certs = {
       'google-cyber': {
         issuer: 'Google',
         name: 'Google Cybersecurity Professional Certificate',
         year: '2026',
-        image: '',       // e.g. 'assets/certs/google-cybersecurity.jpg'
-        pdf:   '',       // e.g. 'assets/certs/google-cybersecurity.pdf'
-        verify: ''       // e.g. 'https://www.coursera.org/verify/XXXX'
+        pdf:    '',   // e.g. 'assets/certs/google-cybersecurity.pdf'
+        verify: ''    // e.g. 'https://www.coursera.org/verify/XXXX'
       },
       'eccouncil': {
         issuer: 'EC-Council',
         name: 'Cybersecurity Attack and Defense Fundamentals',
         year: '2026',
-        image: '',
-        pdf:   '',
+        pdf:    '',
         verify: ''
       },
       'iit-blockchain': {
         issuer: 'IIT Kharagpur',
         name: 'Blockchain and its Applications',
         year: '2025',
-        image: '',
-        pdf:   '',
+        pdf:    '',
         verify: ''
       },
       'google-genai': {
         issuer: 'Google',
         name: 'Introduction to Generative AI Specialization',
         year: '2024',
-        image: '',
-        pdf:   '',
+        pdf:    '',
         verify: ''
       },
       'ibm-cyber': {
         issuer: 'IBM',
         name: 'Introduction to Cybersecurity Essentials',
         year: '2024',
-        image: '',
-        pdf:   '',
+        pdf:    '',
         verify: ''
       }
     };
@@ -835,30 +840,39 @@
     function openModal(id) {
       const c = certs[id];
       if (!c) return;
+
       document.getElementById('modal-issuer').textContent = c.issuer;
       document.getElementById('modal-title').textContent = c.name;
       document.getElementById('modal-year').textContent = c.year;
 
       const wrap = document.getElementById('modal-img-wrap');
-      if (c.image) {
-        wrap.innerHTML = `<img src="${c.image}" alt="${c.name}" />`;
+      if (c.pdf) {
+        wrap.innerHTML = `<iframe src="${c.pdf}" title="${c.name}"></iframe>`;
       } else {
         wrap.innerHTML = `<div class="modal-img-placeholder">
-          Add your certificate image to <code>assets/certs/</code><br/>
-          then update the <code>image</code> field in the script below.
+          Place your PDF in <code>assets/certs/</code> and set the<br/>
+          <code>pdf</code> path in the script to see it here.
         </div>`;
       }
 
-      const verifyBtn = document.getElementById('modal-verify-btn');
-      const dlBtn = document.getElementById('modal-download-btn');
+      const openBtn = document.getElementById('modal-open-btn');
+      const dlBtn   = document.getElementById('modal-download-btn');
+      const verBtn  = document.getElementById('modal-verify-btn');
 
-      verifyBtn.href = c.verify || '#';
-      verifyBtn.style.opacity = c.verify ? '1' : '0.4';
-      verifyBtn.style.pointerEvents = c.verify ? 'auto' : 'none';
+      const hasPdf = !!c.pdf;
+      const hasVerify = !!c.verify;
+
+      openBtn.href = c.pdf || '#';
+      openBtn.style.opacity = hasPdf ? '1' : '0.35';
+      openBtn.style.pointerEvents = hasPdf ? 'auto' : 'none';
 
       dlBtn.href = c.pdf || '#';
-      dlBtn.style.opacity = c.pdf ? '1' : '0.4';
-      dlBtn.style.pointerEvents = c.pdf ? 'auto' : 'none';
+      dlBtn.style.opacity = hasPdf ? '1' : '0.35';
+      dlBtn.style.pointerEvents = hasPdf ? 'auto' : 'none';
+
+      verBtn.href = c.verify || '#';
+      verBtn.style.opacity = hasVerify ? '1' : '0.35';
+      verBtn.style.pointerEvents = hasVerify ? 'auto' : 'none';
 
       document.getElementById('modal-overlay').classList.add('open');
       document.body.style.overflow = 'hidden';
