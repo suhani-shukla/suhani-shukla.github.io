@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta http-equiv="refresh" content="8;url=/" />
+  <title>Page Not Found | Suhani Shukla</title>
+  <style>
+    :root {
+      color-scheme: dark light;
+      --bg: #0d0d0d;
+      --panel: #141414;
+      --border: #2a2a2a;
+      --text: #f4f0ea;
+      --muted: #a8a2b3;
+      --accent: #9a9ecf;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #eae6de;
+        --panel: #f7f3ec;
+        --border: #d2cabc;
+        --text: #2a1a3a;
+        --muted: #675b78;
+        --accent: #401a61;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: radial-gradient(circle at top left, rgba(154, 158, 207, 0.14), transparent 32%), var(--bg);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+    }
+
+    main {
+      width: min(560px, 100%);
+      padding: 2rem;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--panel);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 0.8rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.05;
+      margin: 0 0 0.9rem;
+    }
+
+    p {
+      margin: 0 0 1rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">404</p>
+    <h1>That page does not exist.</h1>
+    <p>The portfolio is a single-page site, so most content lives on the homepage. You’ll be redirected there automatically in a few seconds.</p>
+    <p><a href="/">Return to the homepage</a></p>
+  </main>
+</body>
+</html>
